@@ -1,15 +1,13 @@
 package org.hoshi.grpc.calculator;
 
+import com.google.protobuf.Int32Value;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.hoshi.grpc.calculator.generated.AddRequest;
-import org.hoshi.grpc.calculator.generated.AddResponse;
 import org.hoshi.grpc.calculator.generated.CalculatorGrpc;
 
 import java.util.concurrent.TimeUnit;
 
-public class CalculatorClient {
-
+public class RandomBlockingClientApp {
     public static void main(String[] args) {
         final ManagedChannel channel =
                 ManagedChannelBuilder
@@ -21,15 +19,19 @@ public class CalculatorClient {
         final CalculatorGrpc.CalculatorBlockingStub client =
                 CalculatorGrpc.newBlockingStub(channel);
 
-        final AddRequest request =
-                AddRequest
+        final Int32Value howMany =
+                Int32Value
                         .newBuilder()
-                        .setX(10)
-                        .setY(-3)
+                        .setValue(13)
                         .build();
 
-        final AddResponse response = client.add(request);
+        System.out.println("Sending request.");
 
-        System.out.println(response.getZ());
+        // blocks until all of the number are streamed
+        client.random(howMany).forEachRemaining(int32Value -> {
+            System.out.println("Got = " + int32Value.getValue());
+        });
+
+        System.out.println("Streaming done.");
     }
 }

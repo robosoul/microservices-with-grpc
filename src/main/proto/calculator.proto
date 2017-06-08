@@ -3,18 +3,48 @@ package hoshi_calculator;
 option java_package = "org.hoshi.grpc.calculator.generated";
 option java_multiple_files = true;
 
+// holds Int32Value message
+import "google/protobuf/wrappers.proto";
+
 service Calculator {
-    rpc Add (AddRequest) returns (AddResponse) {
+    // returns result of x + y
+    rpc Add (CalculatorRequest) returns (CalculatorResponse) {
+
+    }
+
+    // returns result of x - y
+    rpc Sub (CalculatorRequest) returns (CalculatorResponse) {
+
+    }
+
+    // returns result of x * y
+    rpc Mul (CalculatorRequest) returns (CalculatorResponse) {
+
+    }
+
+    // returns result of x / y
+    rpc Div (CalculatorRequest) returns (CalculatorResponse) {
+
+    }
+
+    // streams requested number of random numbers
+    // using Int32Value (predefined message)
+    rpc Random (google.protobuf.Int32Value) returns (stream google.protobuf.Int32Value) {
+
+    }
+
+    // streams back max number to client when found
+    rpc Max (stream google.protobuf.Int32Value) returns (stream google.protobuf.Int32Value) {
 
     }
 }
 
-message AddRequest {
+message CalculatorRequest {
     int32 x = 1;
     int32 y = 2;
 }
 
-message AddResponse {
-    int32 z = 1;
+message CalculatorResponse {
+    int32 result = 1;
 }
 
